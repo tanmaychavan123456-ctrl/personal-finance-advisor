@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinAI | Luxury Obsidian & Gold AI Financial Advisor</title>
+
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="AI-Powered Personal Finance Advisor with Goal Tracker, Loan Risk Meter, Dynamic AI Tips, 50/30/20 Budgeting, and interactive Spending Chart.">
+
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <!-- Chart.js CDN for Interactive Spending Pie/Donut Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        obsidian: {
+                            base: '#0F0F0F',
+                            card: '#1A1A1A',
+                            input: '#141414',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            orange: '#FF8A00',
+                            gold: '#FFC857',
+                            cream: '#FFF4DE',
+                            muted: '#A1A1AA'
+                        }
+                    },
+                    animation: {
+                        'glow-pulse': 'glowPulse 3s infinite ease-in-out',
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient-x': 'gradientX 6s ease infinite',
+                    },
+                    keyframes: {
+                        glowPulse: {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'scale(1.02)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' }
+                        },
+                        gradientX: {
+                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-obsidian: #0F0F0F;
+            --card-obsidian: #1A1A1A;
+            --accent-orange: #FF8A00;
+            --accent-gold: #FFC857;
+            --accent-cream: #FFF4DE;
+            --text-muted: #A1A1AA;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow Highlights */
+        .ambient-orange-glow {
+            position: absolute;
+            top: -120px;
+            left: 20%;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(255, 138, 0, 0.14) 0%, rgba(255, 200, 87, 0.06) 45%, transparent 70%);
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .ambient-gold-glow {
+            position: absolute;
+            top: 450px;
+            right: 10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 200, 87, 0.12) 0%, rgba(255, 138, 0, 0.05) 50%, transparent 70%);
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Obsidian Card */
+        .obsidian-card {
+            background-color: #1A1A1A;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 244, 222, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .obsidian-card:hover {
+            border-color: rgba(255, 138, 0, 0.3);
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 138, 0, 0.1);
+        }
+
+        /* Inputs */
+        .obsidian-input-group {
+            position: relative;
+        }
+
+        .obsidian-input {
+            width: 100%;
+            background-color: #141414;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.85rem;
+            padding: 1.05rem 1rem 1.05rem 3.1rem;
+            color: #FFFFFF;
+            font-size: 0.95rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .obsidian-input:focus {
+            border-color: #FF8A00;
+            background-color: #1a1a1a;
+            box-shadow: 0 0 20px rgba(255, 138, 0, 0.25);
+        }
+
+        .obsidian-input-icon {
+            position: absolute;
+            left: 1.15rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #FFC857;
+            transition: color 0.25s ease;
+            font-size: 1rem;
+            pointer-events: none;
+        }
+
+        .obsidian-input-group:focus-within .obsidian-input-icon {
+            color: #FF8A00;
+        }
+
+        .obsidian-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #A1A1AA;
+            margin-bottom: 0.45rem;
+        }
+
+        select.obsidian-input option {
+            background-color: #1A1A1A;
+            color: #FFFFFF;
+            padding: 10px;
+        }
+
+        /* Signature Gradient Button */
+        .btn-signature {
+            background: linear-gradient(135deg, #FF8A00 0%, #FFC857 100%);
+            color: #0F0F0F;
+            font-weight: 800;
+            transition: all 0.35s ease;
+            box-shadow: 0 10px 30px rgba(255, 138, 0, 0.35);
+        }
+
+        .btn-signature:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 138, 0, 0.55), 0 0 20px rgba(255, 200, 87, 0.4);
+            filter: brightness(1.05);
+        }
+
+        .btn-signature:active {
+            transform: translateY(0);
+        }
+
+        /* Gradient Typography helper */
+        .text-gradient-orange-gold {
+            background: linear-gradient(135deg, #FF8A00 0%, #FFC857 50%, #FFF4DE 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Preset Chips */
+        .chip-obsidian {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 200, 87, 0.2);
+            border-radius: 9999px;
+            padding: 0.4rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #FFF4DE;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chip-obsidian:hover {
+            background: rgba(255, 138, 0, 0.15);
+            border-color: #FF8A00;
+            color: #FFC857;
+            transform: translateY(-1px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F0F0F;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262626;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #333333;
+        }
+
+        /* Grid Pattern */
+        .bg-grid-obsidian {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        /* Loader Animation */
+        .btn-loader {
+            display: none;
+        }
+        .form-submitting .btn-text {
+            display: none;
+        }
+        .form-submitting .btn-loader {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body class="bg-grid-obsidian relative min-h-screen">
+
+    <!-- Ambient Backdrops -->
+    <div class="ambient-orange-glow"></div>
+    <div class="ambient-gold-glow"></div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#0F0F0F]/80 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="/" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-[#FF8A00] to-[#FFC857] p-0.5 shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40 transition-all duration-300">
+                    <div class="w-full h-full bg-[#0F0F0F] rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-crown text-[#FFC857] text-lg"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl font-black tracking-tight text-white font-heading">Fin<span class="text-gradient-orange-gold">AI</span></span>
+                        <span class="px-2 py-0.5 text-[10px] font-black tracking-widest text-[#0F0F0F] bg-gradient-to-r from-[#FF8A00] to-[#FFC857] rounded-full uppercase">PRO</span>
+                    </div>
+                    <p class="text-[11px] text-[#A1A1AA] font-medium tracking-wide">Obsidian Risk & Advisory Suite</p>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#advisor-form" class="text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857] transition-colors">Advisor Form</a>
+                <a href="#results-section" class="text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857] transition-colors">Loan Risk & AI Tips</a>
+                <a href="#goal-tracker" class="text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857] transition-colors">Goal Tracker</a>
+                <a href="#spending-chart" class="text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857] transition-colors">Spending Chart</a>
+                <a href="#budget-planner" class="text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857] transition-colors">Budget Planner</a>
+            </nav>
+
+            <!-- Live Status Pill & CTA -->
+            <div class="hidden sm:flex items-center gap-4">
+                <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1A1A1A] border border-white/10 text-xs font-bold text-[#FFF4DE]">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF8A00] opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-[#FF8A00]"></span>
+                    </span>
+                    AI Engine Active
+                </div>
+                <a href="#advisor-form" class="btn-signature px-5 py-2 text-xs rounded-xl shadow-md">
+                    Evaluate Profile
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" aria-label="Toggle Navigation Menu" class="md:hidden text-[#A1A1AA] hover:text-white text-xl p-2">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden bg-[#0F0F0F]/95 border-b border-white/10 px-6 py-4 space-y-3">
+            <a href="#advisor-form" class="block text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857]">Advisor Form</a>
+            <a href="#results-section" class="block text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857]">Loan Risk & AI Tips</a>
+            <a href="#goal-tracker" class="block text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857]">Goal Tracker</a>
+            <a href="#spending-chart" class="block text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857]">Spending Chart</a>
+            <a href="#budget-planner" class="block text-sm font-semibold text-[#A1A1AA] hover:text-[#FFC857]">Budget Planner</a>
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- HERO SECTION -->
+        <section class="text-center max-w-4xl mx-auto space-y-6 pt-4">
+            
+            <!-- Badge Tag -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full obsidian-card border border-[#FF8A00]/40 text-[#FFF4DE] text-xs font-bold tracking-wide shadow-lg">
+                <i class="fa-solid fa-gem text-[#FFC857]"></i>
+                <span>Goal Time Estimator • Loan Risk Meter • Dynamic AI Tips</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-[#FF8A00]"></span>
+                <span class="text-[#A1A1AA]">ML Suite</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black font-heading tracking-tight leading-[1.1]">
+                AI Personal <br>
+                <span class="text-gradient-orange-gold animate-gradient-x">
+                    Finance Advisor
+                </span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-[#A1A1AA] text-base sm:text-xl font-normal max-w-2xl mx-auto leading-relaxed">
+                Compute <strong class="text-[#FFC857]">Loan Risk % Probability</strong>, estimate timeline for goals (<strong class="text-[#FFF4DE]">House, Car, Education, Retirement</strong>), view dynamic data-driven AI tips & spending pie chart.
+            </p>
+
+            <!-- Feature Pills -->
+            <div class="pt-4 flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-[#FFF4DE]">
+                <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#1A1A1A] border border-white/10 text-[#FF8A00]">
+                    <i class="fa-solid fa-gauge-high"></i> Loan Risk Probability
+                </div>
+                <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#1A1A1A] border border-white/10 text-[#FFC857]">
+                    <i class="fa-solid fa-[#FFC857] fa-bullseye"></i> AI Goal Tracker
+                </div>
+                <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#1A1A1A] border border-white/10 text-[#FFF4DE]">
+                    <i class="fa-solid fa-chart-pie"></i> Spending Pie Chart
+                </div>
+                <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#1A1A1A] border border-white/10 text-[#FFC857]">
+                    <i class="fa-solid fa-lightbulb"></i> Dynamic AI Tips
+                </div>
+            </div>
+        </section>
+
+
+        <!-- PREDICTION, LOAN RISK PROBABILITY & AI REASONING SECTION -->
+        {% set credit_val = (request.form.get('credit') or '700')|int %}
+        {% set debt_val = (request.form.get('debt') or '0.25')|float %}
+        {% set emergency_val = (request.form.get('emergency') or '3.0')|float %}
+        {% set surplus_val = (request.form.get('surplus') or '20000')|float %}
+        {% set income_val = (request.form.get('income') or '960000')|float %}
+        {% set expenses_val = (request.form.get('expenses') or '40000')|float %}
+        {% set savings_val = (request.form.get('savings') or '540000')|float %}
+        {% set goal_val = request.form.get('goal') or 'House' %}
+
+        {% if prediction %}
+        {% set prediction_lower = prediction|lower %}
+
+        <!-- FEATURE 11: LOAN RISK PROBABILITY CALCULATION -->
+        {% if probability is defined and probability is not none %}
+            {% if 'avoid' in prediction_lower or 'loan' in prediction_lower or debt_val > 0.40 or credit_val < 620 %}
+                {% set loan_risk_pct = [probability|round|int, 83]|max %}
+            {% else %}
+                {% set loan_risk_pct = [100 - (probability|round|int), 18]|max %}
+            {% endif %}
+        {% else %}
+            {% set loan_risk_pct = 83 %}
+        {% endif %}
+
+        <section id="results-section" class="scroll-mt-28 space-y-8">
+            
+            <!-- Main Verdict & Loan Risk Meter Card -->
+            <div class="obsidian-card rounded-3xl p-6 sm:p-10 relative overflow-hidden border border-[#FF8A00]/40 shadow-2xl space-y-8">
+                
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
+                    
+                    <!-- Left Column: Primary Recommendation Verdict -->
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left w-full lg:w-3/5">
+                        
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#FF8A00] to-[#FFC857] text-[#0F0F0F] flex items-center justify-center text-3xl font-black shrink-0 shadow-xl shadow-orange-500/20">
+                            {% if 'invest' in prediction_lower %}
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                            {% elif 'save' in prediction_lower %}
+                                <i class="fa-solid fa-piggy-bank"></i>
+                            {% else %}
+                                <i class="fa-solid fa-triangle-exclamation text-red-950"></i>
+                            {% endif %}
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-[#FF8A00]/10 text-[#FFC857] border border-[#FF8A00]/30">
+                                <i class="fa-solid fa-robot"></i>
+                                <span>AI Recommendation Output</span>
+                            </div>
+
+                            <h2 class="text-3xl sm:text-5xl font-black tracking-tight font-heading text-gradient-orange-gold">
+                                {{ prediction }}
+                            </h2>
+
+                            <p class="text-[#A1A1AA] text-sm sm:text-base leading-relaxed pt-1">
+                                {% if 'invest' in prediction_lower %}
+                                    Strong income stability and healthy cash reserves detected. Deploy surplus cash flow into growth mutual funds, gold, and liquid yield instruments.
+                                {% elif 'save' in prediction_lower %}
+                                    Solid financial base, but emergency runway requires reinforcement. Focus on high-yield fixed deposits and capital preservation.
+                                {% else %}
+                                    High debt-to-income ratio or compressed liquidity detected. Prioritize debt reduction and freeze new loan commitments immediately.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- FEATURE 11: LOAN RISK PROBABILITY DISPLAY (e.g. Loan Risk 83%) -->
+                    <div class="w-full lg:w-2/5 bg-[#0F0F0F] border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center text-center space-y-4">
+                        <div class="text-xs font-extrabold uppercase tracking-wider text-[#A1A1AA] flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-400"></i>
+                            <span>Credit & Loan Risk Metric</span>
+                        </div>
+                        
+                        <div class="relative flex flex-col items-center justify-center">
+                            <div class="text-xs font-bold text-[#A1A1AA] uppercase tracking-widest mb-1">Loan Risk Probability</div>
+                            <span class="text-5xl font-black tracking-tight font-heading 
+                                {% if loan_risk_pct >= 70 %} text-red-400 
+                                {% elif loan_risk_pct >= 40 %} text-[#FF8A00] 
+                                {% else %} text-emerald-400 {% endif %}">
+                                {{ loan_risk_pct }}%
+                            </span>
+                            <span class="mt-1.5 px-3 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider"
+                                  style="background: {% if loan_risk_pct >= 70 %}#ef444422{% else %}#FF8A0022{% endif %}; color: {% if loan_risk_pct >= 70 %}#ef4444{% else %}#FFC857{% endif %}; border: 1px solid {% if loan_risk_pct >= 70 %}#ef444444{% else %}#FF8A0044{% endif %};">
+                                {% if loan_risk_pct >= 70 %} High Risk Exposure (Avoid Loan)
+                                {% elif loan_risk_pct >= 40 %} Moderate Borrowing Risk
+                                {% else %} Low Risk Solvency
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <!-- Risk Meter Bar -->
+                        <div class="w-full bg-[#1A1A1A] rounded-full h-3 p-0.5 border border-white/10">
+                            <div class="h-full rounded-full transition-all duration-1000 ease-out
+                                {% if loan_risk_pct >= 70 %} bg-gradient-to-r from-[#FF8A00] to-red-500 
+                                {% else %} bg-gradient-to-r from-emerald-500 to-[#FFC857] {% endif %}"
+                                style="width: {{ loan_risk_pct }}%;">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between w-full text-[11px] font-bold text-[#A1A1AA] pt-1">
+                            <span>Risk Threshold: 50%</span>
+                            <span class="text-[#FFF4DE]">Signal Status: Evaluated</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- AI EXPLANATION REASON LIST -->
+                <div class="pt-6 border-t border-white/10 space-y-4">
+                    <div class="flex items-center gap-2 text-sm font-extrabold uppercase tracking-wider text-[#FFF4DE]">
+                        <i class="fa-solid fa-circle-info text-[#FFC857]"></i>
+                        <span>AI Reason Breakdown — Why Recommendation Was Made</span>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-3 text-xs sm:text-sm font-semibold">
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-[#0F0F0F] border border-white/5">
+                            {% if credit_val >= 700 %}
+                                <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-xs shrink-0 font-bold">✔</span>
+                                <div>
+                                    <div class="text-white">Credit Score is Excellent</div>
+                                    <div class="text-[11px] text-[#A1A1AA]">Rating: {{ credit_val }} / 900</div>
+                                </div>
+                            {% else %}
+                                <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-xs shrink-0 font-bold">✖</span>
+                                <div>
+                                    <div class="text-white">Credit Score Needs Improvement</div>
+                                    <div class="text-[11px] text-[#A1A1AA]">Rating: {{ credit_val }} / 900</div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-[#0F0F0F] border border-white/5">
+                            {% if surplus_val > 5000 %}
+                                <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-xs shrink-0 font-bold">✔</span>
+                                <div>
+                                    <div class="text-white">High Monthly Surplus</div>
+                                    <div class="text-[11px] text-[#A1A1AA]">Available: ₹{{"{:,}".format(surplus_val|int)}} / mo</div>
+                                </div>
+                            {% else %}
+                                <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-xs shrink-0 font-bold">✖</span>
+                                <div>
+                                    <div class="text-white">Low Monthly Cash Flow Surplus</div>
+                                    <div class="text-[11px] text-[#A1A1AA]">Available: ₹{{"{:,}".format(surplus_val|int)}} / mo</div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-[#0F0F0F] border border-white/5">
+                            {% if debt_val <= 0.35 %}
+                                <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-xs shrink-0 font-bold">✔</span>
+                                <div>
+                                    <div class="text-white">Low Debt Burden</div>
+                                    <div class="text-[11px] text-[#A1A1AA]">DTI Ratio: {{ debt_val }}</div>
+                                </div>
+                            {% else %}
+                                <span class="w-6 h-6 rounded-full bg-red-500/20 text-red-400 border border-red-500/40 flex items-center justify-center text-xs shrink-0 font-bold">✖</span>
+                                <div>
+                                    <div class="text-white">Elevated Debt-to-Income Ratio</div>
+                                    <div class="text-[11px] text-[#A1A1AA]">DTI Ratio: {{ debt_val }}</div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-[#0F0F0F] border border-white/5">
+                            {% if emergency_val >= 3.0 %}
+                                <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-xs shrink-0 font-bold">✔</span>
+                                <div>
+                                    <div class="text-white">Emergency Fund Available</div>
+                                    <div class="text-[11px] text-[#A1A1AA]">Covered: {{ emergency_val }} Months</div>
+                                </div>
+                            {% else %}
+                                <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-xs shrink-0 font-bold">✖</span>
+                                <div>
+                                    <div class="text-white">Emergency Runway Under Benchmark</div>
+                                    <div class="text-[11px] text-[#A1A1AA]">Covered: {{ emergency_val }} Months</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SPECIFIC ASSET ALLOCATION -->
+                <div class="pt-6 border-t border-white/10 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-sm font-extrabold uppercase tracking-wider text-[#FFF4DE]">
+                            <i class="fa-solid fa-chart-pie text-[#FF8A00]"></i>
+                            <span>Recommended Asset Allocation</span>
+                        </div>
+                        <span class="text-xs text-[#FFC857] font-bold">Target Portfolio Split</span>
+                    </div>
+
+                    <div class="grid sm:grid-cols-3 gap-4">
+                        <div class="p-5 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#FF8A00] to-[#FFC857] text-[#0F0F0F] font-black text-sm flex items-center justify-center">60%</span>
+                                <i class="fa-solid fa-chart-line text-[#FFC857] text-xl"></i>
+                            </div>
+                            <h3 class="text-base font-black text-white font-heading">Mutual Funds & Index ETFs</h3>
+                            <p class="text-xs text-[#A1A1AA]">Deploy into equity index funds and growth mutual funds for long-term compound wealth.</p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="w-10 h-10 rounded-xl bg-[#FFC857] text-[#0F0F0F] font-black text-sm flex items-center justify-center">20%</span>
+                                <i class="fa-solid fa-coins text-[#FFC857] text-xl"></i>
+                            </div>
+                            <h3 class="text-base font-black text-white font-heading">Sovereign Gold & Metals</h3>
+                            <p class="text-xs text-[#A1A1AA]">Hedge against inflation and market volatility using physical or digital Gold bonds.</p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="w-10 h-10 rounded-xl bg-[#FFF4DE] text-[#0F0F0F] font-black text-sm flex items-center justify-center">20%</span>
+                                <i class="fa-solid fa-vault text-[#FFF4DE] text-xl"></i>
+                            </div>
+                            <h3 class="text-base font-black text-white font-heading">Fixed Deposit / Liquid Debt</h3>
+                            <p class="text-xs text-[#A1A1AA]">Maintain capital protection in guaranteed high-yield Fixed Deposits.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        {% endif %}
+
+
+        <!-- FEATURE 8: AI GOAL TRACKER (House, Car, Education, Retirement) -->
+        {% set goal_name = goal_val %}
+        {% set current_sav = savings_val|int %}
+        {% set mo_surplus = surplus_val|int %}
+
+        {% if goal_name == 'House' %}
+            {% set goal_target = 2500000 %}
+        {% elif goal_name == 'Retirement' %}
+            {% set goal_target = 10000000 %}
+        {% elif goal_name == 'Education' %}
+            {% set goal_target = 1500000 %}
+        {% elif goal_name == 'Car' %}
+            {% set goal_target = 1000000 %}
+        {% else %}
+            {% set goal_target = 5000000 %}
+        {% endif %}
+
+        {% set goal_needed = [goal_target - current_sav, 0]|max %}
+        {% set annual_contrib = [mo_surplus * 12, 120000]|max %}
+        {% set estimated_years = (goal_needed / annual_contrib)|round(1) if goal_needed > 0 else 0 %}
+        {% set goal_pct = [((current_sav / goal_target) * 100)|round|int, 100]|min %}
+
+        <section id="goal-tracker" class="scroll-mt-28 obsidian-card rounded-3xl p-6 sm:p-10 border border-[#FF8A00]/30 shadow-2xl space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/10 pb-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FF8A00]/10 border border-[#FF8A00]/30 text-[#FFC857] text-xs font-extrabold uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-bullseye"></i> Feature #8: AI Interactive Goal & Retirement Estimator
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-black font-heading text-white tracking-tight">AI Goal Tracker</h2>
+                    <p class="text-[#A1A1AA] text-xs sm:text-sm mt-1">Input target & savings to instantly compute years required for your Retirement or custom goal.</p>
+                </div>
+
+                <div class="px-5 py-3 rounded-2xl bg-[#0F0F0F] border border-white/10 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#FF8A00] to-[#FFC857] text-[#0F0F0F] flex items-center justify-center font-black text-lg">
+                        <i class="fa-solid fa-flag-checkered"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-bold text-[#A1A1AA] uppercase">Target Goal</div>
+                        <div class="text-base font-extrabold text-[#FFF4DE]" id="goalNameDisplay">{{ goal_name }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Inputs Panel -->
+            <div class="p-6 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-5">
+                <div class="flex items-center justify-between border-b border-white/5 pb-3">
+                    <span class="text-xs font-bold text-[#FFF4DE] flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-[#FFC857]"></i> Interactive Goal & Retirement Calculator
+                    </span>
+                    <span class="text-xs text-[#FFC857] font-bold">Real-time Calculation</span>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Goal Category Selection -->
+                    <div class="obsidian-input-group">
+                        <label for="goalCategoryInput" class="obsidian-label">Goal Category</label>
+                        <i class="fa-solid fa-flag-checkered obsidian-input-icon"></i>
+                        <select id="goalCategoryInput" class="obsidian-input text-xs" onchange="onGoalCategoryChange()">
+                            <option value="Retirement" {% if goal_name == 'Retirement' %}selected{% endif %}>Retirement & Freedom</option>
+                            <option value="House" {% if goal_name == 'House' %}selected{% endif %}>Buy House</option>
+                            <option value="Car" {% if goal_name == 'Car' %}selected{% endif %}>Car Purchase</option>
+                            <option value="Education" {% if goal_name == 'Education' %}selected{% endif %}>Higher Education</option>
+                            <option value="Wealth Creation" {% if goal_name == 'Wealth Creation' %}selected{% endif %}>Wealth Creation</option>
+                        </select>
+                    </div>
+
+                    <!-- Target Amount (₹) -->
+                    <div class="obsidian-input-group">
+                        <label for="goalTargetInput" class="obsidian-label">Target Amount (₹)</label>
+                        <i class="fa-solid fa-bullseye obsidian-input-icon"></i>
+                        <input type="number" id="goalTargetInput" step="10000" placeholder="e.g. 10000000" value="{{ goal_target }}" class="obsidian-input text-xs" oninput="updateLiveGoalTracker()">
+                    </div>
+
+                    <!-- Current Savings (₹) -->
+                    <div class="obsidian-input-group">
+                        <label for="goalSavingsInput" class="obsidian-label">Current Savings (₹)</label>
+                        <i class="fa-solid fa-piggy-bank obsidian-input-icon"></i>
+                        <input type="number" id="goalSavingsInput" step="5000" placeholder="e.g. 540000" value="{{ current_sav }}" class="obsidian-input text-xs" oninput="updateLiveGoalTracker()">
+                    </div>
+
+                    <!-- Monthly Contribution / Surplus (₹) -->
+                    <div class="obsidian-input-group">
+                        <label for="goalMonthlySurplusInput" class="obsidian-label">Monthly Surplus (₹/mo)</label>
+                        <i class="fa-solid fa-chart-line-up obsidian-input-icon"></i>
+                        <input type="number" id="goalMonthlySurplusInput" step="1000" placeholder="e.g. 20000" value="{{ mo_surplus }}" class="obsidian-input text-xs" oninput="updateLiveGoalTracker()">
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+                    <div class="flex items-center gap-3 text-xs">
+                        <span class="text-[#A1A1AA] font-bold">Assumed Investment Growth Rate:</span>
+                        <select id="goalReturnRateInput" class="bg-[#1A1A1A] border border-white/10 rounded-xl px-3 py-1.5 text-xs text-[#FFC857] font-bold outline-none cursor-pointer" onchange="updateLiveGoalTracker()">
+                            <option value="0">0% (Pure Cash Savings)</option>
+                            <option value="7">7% (Fixed Deposits / Debt)</option>
+                            <option value="10" selected>10% p.a. (Equity & Index Funds)</option>
+                            <option value="12">12% p.a. (Aggressive Portfolio)</option>
+                        </select>
+                    </div>
+
+                    <div class="text-[11px] text-[#A1A1AA]">
+                        <i class="fa-solid fa-wand-magic-sparkles text-[#FFC857]"></i> AI dynamically computes compounding growth timeline.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goal Timeline Cards Grid -->
+            <div class="grid sm:grid-cols-4 gap-6">
+                
+                <!-- Card 1: Selected Goal -->
+                <div class="p-6 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-2">
+                    <div class="text-xs font-bold text-[#A1A1AA] uppercase">Selected Goal</div>
+                    <div class="text-2xl font-black font-heading text-white flex items-center gap-2">
+                        <i id="goalIconDisplay" class="fa-solid {% if goal_name == 'House' %}fa-house{% elif goal_name == 'Retirement' %}fa-person-cane{% elif goal_name == 'Education' %}fa-graduation-cap{% elif goal_name == 'Car' %}fa-car{% else %}fa-chart-line-up{% endif %} text-[#FFC857]"></i>
+                        <span id="goalSelectedDisplay">{{ goal_name }}</span>
+                    </div>
+                    <p class="text-[11px] text-[#A1A1AA]">User chosen objective</p>
+                </div>
+
+                <!-- Card 2: Current Savings -->
+                <div class="p-6 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-2">
+                    <div class="text-xs font-bold text-[#A1A1AA] uppercase">Current Savings</div>
+                    <div class="text-2xl font-black font-heading text-[#FFC857]" id="goalSavingsDisplay">
+                        ₹{{"{:,}".format(current_sav)}}
+                    </div>
+                    <p class="text-[11px] text-[#A1A1AA]">Accumulated liquid pool</p>
+                </div>
+
+                <!-- Card 3: Target Amount Needed -->
+                <div class="p-6 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-2">
+                    <div class="text-xs font-bold text-[#A1A1AA] uppercase">Total Target Need</div>
+                    <div class="text-2xl font-black font-heading text-white" id="goalTargetDisplay">
+                        ₹{{"{:,}".format(goal_target)}}
+                    </div>
+                    <p class="text-[11px] text-[#A1A1AA]">Estimated capital target</p>
+                </div>
+
+                <!-- Card 4: Estimated Time -->
+                <div class="p-6 rounded-2xl bg-[#0F0F0F] border border-[#FF8A00]/40 space-y-2 bg-gradient-to-br from-[#1A1A1A] to-[#0F0F0F]">
+                    <div class="text-xs font-black text-[#FF8A00] uppercase tracking-wider">Estimated Time to Goal</div>
+                    <div class="text-3xl font-black font-heading text-gradient-orange-gold" id="goalYearsDisplay">
+                        {{ estimated_years }} Years
+                    </div>
+                    <p class="text-[11px] text-[#A1A1AA]">At monthly surplus rate</p>
+                </div>
+
+            </div>
+
+            <!-- Goal Progress Bar -->
+            <div class="p-6 rounded-2xl bg-[#0F0F0F] border border-white/5 space-y-3">
+                <div class="flex justify-between items-center text-xs font-bold">
+                    <span class="text-white" id="goalPctDisplayText">Goal Completion Progress: {{ goal_pct }}% Achieved</span>
+                    <span class="text-[#FFC857]" id="goalRemainingDisplay">Remaining Balance: ₹{{"{:,}".format(goal_needed)}}</span>
+                </div>
+                <div class="w-full bg-[#1A1A1A] rounded-full h-3.5 p-0.5 border border-white/10">
+                    <div id="goalProgressBar" class="bg-gradient-to-r from-[#FF8A00] to-[#FFC857] h-full rounded-full transition-all duration-1000" style="width: {{ goal_pct }}%;"></div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- FEATURE 9: DYNAMIC DATA-DRIVEN AI FINANCIAL TIPS -->
+        {% set spending_ratio = (((expenses_val * 12) / income_val) * 100)|round|int if income_val > 0 else 50 %}
+        <section id="ai-tips" class="scroll-mt-28 obsidian-card rounded-3xl p-6 sm:p-10 border border-white/10 space-y-6">
+            <div class="flex items-center gap-3 border-b border-white/10 pb-4">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#FF8A00] to-[#FFC857] text-[#0F0F0F] flex items-center justify-center font-black text-lg">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-black font-heading text-white tracking-tight">Dynamic AI Financial Tips</h2>
+                    <p class="text-[#A1A1AA] text-xs sm:text-sm">Personalized insights generated dynamically from your balance sheet telemetry.</p>
+                </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Tip 1: Spending Ratio -->
+                <div class="p-5 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-2">
+                    <div class="text-xs font-bold text-[#FF8A00] flex items-center gap-2">
+                        <i class="fa-solid fa-chart-bar"></i> Spending Ratio Analysis
+                    </div>
+                    <div class="text-base font-extrabold text-white">
+                        You spend <span class="text-[#FFC857]">{{ spending_ratio }}%</span> of your annual income.
+                    </div>
+                    <p class="text-xs text-[#A1A1AA] leading-relaxed">
+                        {% if spending_ratio > 60 %}
+                            Reduce entertainment and discretionary expenses to unlock higher monthly surplus.
+                        {% else %}
+                            Excellent cash flow management! Keep discretionary spending disciplined.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Tip 2: Emergency Fund -->
+                <div class="p-5 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-2">
+                    <div class="text-xs font-bold text-[#FFC857] flex items-center gap-2">
+                        <i class="fa-solid fa-shield-heart"></i> Emergency Runway
+                    </div>
+                    <div class="text-base font-extrabold text-white">
+                        Reserves cover <span class="text-[#FFC857]">{{ emergency_val }} Months</span> of costs.
+                    </div>
+                    <p class="text-xs text-[#A1A1AA] leading-relaxed">
+                        {% if emergency_val < 6.0 %}
+                            Increase emergency liquid savings to reach the 6-month safety benchmark.
+                        {% else %}
+                            Your emergency runway is fully insulated against income disruptions.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Tip 3: Loan & Debt Caution -->
+                <div class="p-5 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-2">
+                    <div class="text-xs font-bold text-red-400 flex items-center gap-2">
+                        <i class="fa-solid fa-ban"></i> Debt Management
+                    </div>
+                    <div class="text-base font-extrabold text-white">
+                        DTI Ratio at <span class="text-red-400">{{ debt_val }}</span> level.
+                    </div>
+                    <p class="text-xs text-[#A1A1AA] leading-relaxed">
+                        {% if debt_val > 0.35 %}
+                            Avoid taking on new loans or liabilities until outstanding debt is reduced.
+                        {% else %}
+                            Your debt leverage is well controlled. Maintain minimal credit balances.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Tip 4: Credit Power -->
+                <div class="p-5 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-2">
+                    <div class="text-xs font-bold text-[#FFF4DE] flex items-center gap-2">
+                        <i class="fa-solid fa-star"></i> Credit Score Power
+                    </div>
+                    <div class="text-base font-extrabold text-white">
+                        Standing at <span class="text-[#FFF4DE]">{{ credit_val }} / 900</span> score.
+                    </div>
+                    <p class="text-xs text-[#A1A1AA] leading-relaxed">
+                        Keep credit utilization below 30% to maintain institutional prime borrowing rates.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- FEATURE 10: SPENDING PIE / DONUT CHART BREAKDOWN -->
+        {% set monthly_income_val = (income_val / 12)|round|int %}
+        {% set monthly_emi_val = (monthly_income_val * debt_val)|round|int %}
+        {% set monthly_savings_val = [surplus_val|int, (monthly_income_val * 0.20)|round|int]|max %}
+        {% set monthly_needs_val = [monthly_income_val - monthly_savings_val - monthly_emi_val, 0]|max %}
+
+        <section id="spending-chart" class="scroll-mt-28 obsidian-card rounded-3xl p-6 sm:p-10 border border-[#FF8A00]/30 shadow-2xl space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/10 pb-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FF8A00]/10 border border-[#FF8A00]/30 text-[#FFC857] text-xs font-extrabold uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-chart-pie"></i> Visual Telemetry Breakdown
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-black font-heading text-white tracking-tight">Spending & Allocation Pie Chart</h2>
+                    <p class="text-[#A1A1AA] text-xs sm:text-sm mt-1">Interactive graphical split of Monthly Income into Needs, Savings, and EMI obligations.</p>
+                </div>
+
+                <div class="px-5 py-3 rounded-2xl bg-[#0F0F0F] border border-white/10 flex items-center gap-3">
+                    <div class="text-right">
+                        <div class="text-[10px] font-bold text-[#A1A1AA] uppercase">Total Monthly Cash Flow</div>
+                        <div class="text-xl font-black font-heading text-gradient-orange-gold">
+                            ₹{{"{:,}".format(monthly_income_val)}} / mo
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8 items-center">
+                <!-- Doughnut Chart Canvas -->
+                <div class="lg:col-span-5 flex justify-center items-center p-6 bg-[#0F0F0F] rounded-3xl border border-white/10">
+                    <div class="relative w-64 h-64">
+                        <canvas id="spendingDonutChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Legend & Bars -->
+                <div class="lg:col-span-7 space-y-5">
+                    
+                    <!-- Needs Bar -->
+                    <div class="p-4 rounded-2xl bg-[#0F0F0F] border border-white/5 space-y-2">
+                        <div class="flex justify-between items-center text-xs font-bold">
+                            <span class="flex items-center gap-2 text-white"><span class="w-3 h-3 rounded-full bg-[#FF8A00]"></span> Needs & Living Expenses</span>
+                            <span class="text-[#FF8A00]">₹{{"{:,}".format(monthly_needs_val)}}</span>
+                        </div>
+                        <div class="w-full bg-[#1A1A1A] rounded-full h-2.5">
+                            <div class="bg-[#FF8A00] h-2.5 rounded-full" style="width: {{ ((monthly_needs_val / monthly_income_val)*100)|round|int if monthly_income_val > 0 else 50 }}%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Savings Bar -->
+                    <div class="p-4 rounded-2xl bg-[#0F0F0F] border border-white/5 space-y-2">
+                        <div class="flex justify-between items-center text-xs font-bold">
+                            <span class="flex items-center gap-2 text-white"><span class="w-3 h-3 rounded-full bg-[#FFC857]"></span> Net Surplus & Savings</span>
+                            <span class="text-[#FFC857]">₹{{"{:,}".format(monthly_savings_val)}}</span>
+                        </div>
+                        <div class="w-full bg-[#1A1A1A] rounded-full h-2.5">
+                            <div class="bg-[#FFC857] h-2.5 rounded-full" style="width: {{ ((monthly_savings_val / monthly_income_val)*100)|round|int if monthly_income_val > 0 else 30 }}%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- EMI / Debt Bar -->
+                    <div class="p-4 rounded-2xl bg-[#0F0F0F] border border-white/5 space-y-2">
+                        <div class="flex justify-between items-center text-xs font-bold">
+                            <span class="flex items-center gap-2 text-white"><span class="w-3 h-3 rounded-full bg-[#FFF4DE]"></span> EMI & Loan Obligations</span>
+                            <span class="text-[#FFF4DE]">₹{{"{:,}".format(monthly_emi_val)}}</span>
+                        </div>
+                        <div class="w-full bg-[#1A1A1A] rounded-full h-2.5">
+                            <div class="bg-[#FFF4DE] h-2.5 rounded-full" style="width: {{ ((monthly_emi_val / monthly_income_val)*100)|round|int if monthly_income_val > 0 else 20 }}%;"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- AUTOMATIC MONTHLY BUDGET PLANNER (50/30/20 RULE) -->
+        <section id="budget-planner" class="scroll-mt-28 obsidian-card rounded-3xl p-6 sm:p-10 border border-[#FF8A00]/30 shadow-2xl space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/10 pb-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FF8A00]/10 border border-[#FF8A00]/30 text-[#FFC857] text-xs font-extrabold uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-calculator"></i> Smart Budget Allocation
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-black font-heading text-white tracking-tight">Monthly Budget Planner (50/30/20 Rule)</h2>
+                    <p class="text-[#A1A1AA] text-xs sm:text-sm mt-1">Automatically splits your monthly income into Needs, Wants, and Savings & Investments.</p>
+                </div>
+
+                <div class="px-5 py-3 rounded-2xl bg-[#0F0F0F] border border-white/10 flex items-center gap-3">
+                    <div class="text-right">
+                        <div class="text-[10px] font-bold text-[#A1A1AA] uppercase">Calculated Monthly Income</div>
+                        <div class="text-xl font-black font-heading text-gradient-orange-gold" id="budgetIncomeDisplay">
+                            ₹{{"{:,}".format(monthly_income_val)}} / mo
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget 3-Card Split Grid -->
+            <div class="grid sm:grid-cols-3 gap-6">
+                
+                <!-- Needs Card (50%) -->
+                <div class="p-6 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-4 relative overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <span class="px-3 py-1 rounded-full bg-[#FF8A00]/20 text-[#FF8A00] border border-[#FF8A00]/30 text-xs font-black">
+                            50% Needs
+                        </span>
+                        <i class="fa-solid fa-house-chimney text-[#FF8A00] text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-[#A1A1AA] font-bold uppercase">Essential Allocations</div>
+                        <div class="text-3xl font-black font-heading text-white mt-1" id="needsAmountDisplay">
+                            ₹{{"{:,}".format((monthly_income_val * 0.50)|round|int)}}
+                        </div>
+                    </div>
+                    <p class="text-xs text-[#A1A1AA] leading-relaxed">
+                        Rent/Mortgage, Utilities, Groceries, Insurance, Health & Minimum Debt payments.
+                    </p>
+                </div>
+
+                <!-- Wants Card (30%) -->
+                <div class="p-6 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-4 relative overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <span class="px-3 py-1 rounded-full bg-[#FFC857]/20 text-[#FFC857] border border-[#FFC857]/30 text-xs font-black">
+                            30% Wants
+                        </span>
+                        <i class="fa-solid fa-bag-shopping text-[#FFC857] text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-[#A1A1AA] font-bold uppercase">Lifestyle & Desires</div>
+                        <div class="text-3xl font-black font-heading text-white mt-1" id="wantsAmountDisplay">
+                            ₹{{"{:,}".format((monthly_income_val * 0.30)|round|int)}}
+                        </div>
+                    </div>
+                    <p class="text-xs text-[#A1A1AA] leading-relaxed">
+                        Dining out, Travel, Entertainment, Subscriptions & Personal Hobbies.
+                    </p>
+                </div>
+
+                <!-- Savings Card (20%) -->
+                <div class="p-6 rounded-2xl bg-[#0F0F0F] border border-white/10 space-y-4 relative overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <span class="px-3 py-1 rounded-full bg-[#FFF4DE]/20 text-[#FFF4DE] border border-[#FFF4DE]/30 text-xs font-black">
+                            20% Savings
+                        </span>
+                        <i class="fa-solid fa-piggy-bank text-[#FFF4DE] text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-[#A1A1AA] font-bold uppercase">Wealth & Investments</div>
+                        <div class="text-3xl font-black font-heading text-[#FFC857] mt-1" id="savingsAmountDisplay">
+                            ₹{{"{:,}".format((monthly_income_val * 0.20)|round|int)}}
+                        </div>
+                    </div>
+                    <p class="text-xs text-[#A1A1AA] leading-relaxed">
+                        60% Mutual Funds, 20% Gold, 20% Fixed Deposits & Emergency Fund accumulation.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Custom Budget Simulator Tool -->
+            <div class="p-5 rounded-2xl bg-[#0F0F0F] border border-white/5 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-bold">
+                    <span class="text-[#FFF4DE] flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-[#FFC857]"></i> Interactive Custom Monthly Income Simulator:
+                    </span>
+                    <span class="text-[#FFC857]">Type any amount below to recalculate 50/30/20 instantly</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative w-full max-w-xs">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#FFC857] font-bold">₹</span>
+                        <input type="number" id="customMonthlyIncome" placeholder="e.g. 80000" value="{{ monthly_income_val }}" class="w-full bg-[#1A1A1A] border border-white/10 rounded-xl py-2 pl-8 pr-4 text-white text-sm font-bold outline-none focus:border-[#FF8A00]" oninput="updateCustomBudget()">
+                    </div>
+                    <button type="button" onclick="updateCustomBudget()" class="chip-obsidian py-2">
+                        Recalculate Split
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- MAIN FINANCIAL DIAGNOSTIC FORM SECTION -->
+        <section id="advisor-form" class="scroll-mt-28 space-y-6">
+            
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-black font-heading text-white tracking-tight">Financial Telemetry Input</h2>
+                    <p class="text-[#A1A1AA] text-xs sm:text-sm">Enter your metrics below to evaluate your 0–100 Financial Health Score & receive AI advice.</p>
+                </div>
+
+                <!-- Live Calculated Score Preview Pill Widget -->
+                <div class="px-4 py-2 rounded-2xl bg-[#1A1A1A] border border-[#FF8A00]/40 flex items-center gap-3 shrink-0 shadow-lg">
+                    <div class="text-left">
+                        <div class="text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider">Live Health Estimate</div>
+                        <div class="text-lg font-black font-heading text-gradient-orange-gold">
+                            Financial Health <span id="liveScorePreview">--</span>/100
+                        </div>
+                    </div>
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#FF8A00] to-[#FFC857] flex items-center justify-center text-[#0F0F0F] font-black">
+                        <i class="fa-solid fa-gauge"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Fill Profile Presets Bar -->
+            <div class="p-4 rounded-2xl bg-[#1A1A1A] border border-white/10 flex flex-wrap items-center justify-between gap-3">
+                <span class="text-xs text-[#FFF4DE] font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-[#FFC857]"></i> Quick Fill Profiles:
+                </span>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="fillProfile('wealth')" class="chip-obsidian">
+                        <i class="fa-solid fa-rocket text-[#FFC857]"></i> High Wealth (Est. 92/100)
+                    </button>
+                    <button type="button" onclick="fillProfile('balanced')" class="chip-obsidian">
+                        <i class="fa-solid fa-scale-balanced text-[#FF8A00]"></i> Balanced Saver (Est. 68/100)
+                    </button>
+                    <button type="button" onclick="fillProfile('debt')" class="chip-obsidian">
+                        <i class="fa-solid fa-life-ring text-red-400"></i> Debt Payoff (Est. 34/100)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Container -->
+            <div class="obsidian-card rounded-3xl p-6 sm:p-10 border border-white/10">
+                
+                <form action="/predict" method="POST" id="financeForm" class="space-y-10">
+
+                    <!-- SECTION 1: Personal & Professional Profile -->
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-3 border-b border-white/10 pb-3">
+                            <div class="w-8 h-8 rounded-lg bg-[#FF8A00]/20 border border-[#FF8A00]/30 flex items-center justify-center text-[#FFC857] text-sm">
+                                <i class="fa-solid fa-user-gear"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-extrabold text-white font-heading">1. Personal & Employment Profile</h3>
+                                <p class="text-xs text-[#A1A1AA]">Demographic attributes used to calibrate risk parameters.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            
+                            <!-- Age -->
+                            <div class="obsidian-input-group">
+                                <label for="age" class="obsidian-label">Age (Years)</label>
+                                <i class="fa-solid fa-calendar-user obsidian-input-icon"></i>
+                                <input type="number" id="age" name="age" min="18" max="100" placeholder="e.g. 32" value="{{ request.form.get('age', '') }}" required class="obsidian-input">
+                            </div>
+
+                            <!-- Dependents -->
+                            <div class="obsidian-input-group">
+                                <label for="dependents" class="obsidian-label">Dependents</label>
+                                <i class="fa-solid fa-users obsidian-input-icon"></i>
+                                <input type="number" id="dependents" name="dependents" min="0" max="15" placeholder="e.g. 2" value="{{ request.form.get('dependents', '') }}" required class="obsidian-input">
+                            </div>
+
+                            <!-- Employment Type -->
+                            <div class="obsidian-input-group">
+                                <label for="employment" class="obsidian-label">Employment Type</label>
+                                <i class="fa-solid fa-briefcase obsidian-input-icon"></i>
+                                <select id="employment" name="employment" required class="obsidian-input">
+                                    <option value="" disabled {% if not request.form.get('employment') %}selected{% endif %}>Select Type</option>
+                                    <option value="Salaried" {% if request.form.get('employment') == 'Salaried' %}selected{% endif %}>Salaried Corporate</option>
+                                    <option value="Business" {% if request.form.get('employment') == 'Business' %}selected{% endif %}>Business Owner</option>
+                                    <option value="Self-Employed" {% if request.form.get('employment') == 'Self-Employed' %}selected{% endif %}>Self-Employed / Freelance</option>
+                                </select>
+                            </div>
+
+                            <!-- Investment Experience -->
+                            <div class="obsidian-input-group">
+                                <label for="experience" class="obsidian-label">Investment Experience</label>
+                                <i class="fa-solid fa-graduation-cap obsidian-input-icon"></i>
+                                <select id="experience" name="experience" required class="obsidian-input">
+                                    <option value="" disabled {% if not request.form.get('experience') %}selected{% endif %}>Select Level</option>
+                                    <option value="Beginner" {% if request.form.get('experience') == 'Beginner' %}selected{% endif %}>Beginner (< 2 yrs)</option>
+                                    <option value="Intermediate" {% if request.form.get('experience') == 'Intermediate' %}selected{% endif %}>Intermediate (2-5 yrs)</option>
+                                    <option value="Expert" {% if request.form.get('experience') == 'Expert' %}selected{% endif %}>Expert (5+ yrs)</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: Income & Cash Flow Telemetry (Score Factor 1 & 2) -->
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-[#FF8A00]/20 border border-[#FF8A00]/30 flex items-center justify-center text-[#FFC857] text-sm">
+                                    <i class="fa-solid fa-wallet"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-extrabold text-white font-heading">2. Income & Savings Factors</h3>
+                                    <p class="text-xs text-[#A1A1AA]">Liquid wealth parameters evaluated in health score calculation.</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-[#FFC857] font-bold px-3 py-1 rounded-full bg-[#FF8A00]/10 border border-[#FF8A00]/20">
+                                Score Factor #1 & #2
+                            </span>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            
+                            <!-- Annual Income (Factor 1) -->
+                            <div class="obsidian-input-group">
+                                <label for="income" class="obsidian-label">Annual Income (₹/$)</label>
+                                <i class="fa-solid fa-sack-dollar obsidian-input-icon"></i>
+                                <input type="number" id="income" name="income" step="any" placeholder="e.g. 960000" value="{{ request.form.get('income', '') }}" required class="obsidian-input" oninput="recalculateLiveScore(); updateCustomBudget();">
+                            </div>
+
+                            <!-- Monthly Expenses -->
+                            <div class="obsidian-input-group">
+                                <label for="expenses" class="obsidian-label">Monthly Expenses (₹/$)</label>
+                                <i class="fa-solid fa-receipt obsidian-input-icon"></i>
+                                <input type="number" id="expenses" name="expenses" step="any" placeholder="e.g. 40000" value="{{ request.form.get('expenses', '') }}" required class="obsidian-input" oninput="recalculateLiveScore()">
+                            </div>
+
+                            <!-- Total Savings (Factor 2) -->
+                            <div class="obsidian-input-group">
+                                <label for="savings" class="obsidian-label">Total Savings (₹/$)</label>
+                                <i class="fa-solid fa-piggy-bank obsidian-input-icon"></i>
+                                <input type="number" id="savings" name="savings" step="any" placeholder="e.g. 540000" value="{{ request.form.get('savings', '') }}" required class="obsidian-input" oninput="recalculateLiveScore()">
+                            </div>
+
+                            <!-- Monthly Surplus -->
+                            <div class="obsidian-input-group">
+                                <label for="surplus" class="obsidian-label">Monthly Surplus (₹/$)</label>
+                                <i class="fa-solid fa-chart-line-up obsidian-input-icon"></i>
+                                <input type="number" id="surplus" name="surplus" step="any" placeholder="e.g. 20000" value="{{ request.form.get('surplus', '') }}" required class="obsidian-input" oninput="recalculateLiveScore()">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: Debt, Credit & Emergency Fund (Score Factor 3, 4 & 5) -->
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-[#FF8A00]/20 border border-[#FF8A00]/30 flex items-center justify-center text-[#FFC857] text-sm">
+                                    <i class="fa-solid fa-credit-card"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-extrabold text-white font-heading">3. Debt, Credit & Emergency Reserves</h3>
+                                    <p class="text-xs text-[#A1A1AA]">Solvency indicators assessing leverage and emergency runway.</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-[#FFC857] font-bold px-3 py-1 rounded-full bg-[#FF8A00]/10 border border-[#FF8A00]/20">
+                                Score Factor #3, #4 & #5
+                            </span>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                            
+                            <!-- Credit Score (Factor 4) -->
+                            <div class="obsidian-input-group">
+                                <label for="credit" class="obsidian-label">Credit Score (350-900)</label>
+                                <i class="fa-solid fa-gauge-high obsidian-input-icon"></i>
+                                <input type="number" id="credit" name="credit" min="350" max="900" placeholder="e.g. 780" value="{{ request.form.get('credit', '') }}" required class="obsidian-input" oninput="recalculateLiveScore()">
+                            </div>
+
+                            <!-- Loan Amount -->
+                            <div class="obsidian-input-group">
+                                <label for="loan" class="obsidian-label">Requested/Total Loan (₹/$)</label>
+                                <i class="fa-solid fa-landmark obsidian-input-icon"></i>
+                                <input type="number" id="loan" name="loan" step="any" placeholder="e.g. 0" value="{{ request.form.get('loan', '') }}" required class="obsidian-input">
+                            </div>
+
+                            <!-- Existing Loan -->
+                            <div class="obsidian-input-group">
+                                <label for="existing_loan" class="obsidian-label">Active Existing Loan?</label>
+                                <i class="fa-solid fa-file-invoice-dollar obsidian-input-icon"></i>
+                                <select id="existing_loan" name="existing_loan" required class="obsidian-input">
+                                    <option value="" disabled {% if not request.form.get('existing_loan') %}selected{% endif %}>Select</option>
+                                    <option value="No" {% if request.form.get('existing_loan') == 'No' %}selected{% endif %}>No Active Loans</option>
+                                    <option value="Yes" {% if request.form.get('existing_loan') == 'Yes' %}selected{% endif %}>Yes Active Loans</option>
+                                </select>
+                            </div>
+
+                            <!-- Debt to Income Ratio (Factor 3) -->
+                            <div class="obsidian-input-group">
+                                <label for="debt" class="obsidian-label">Debt-to-Income Ratio</label>
+                                <i class="fa-solid fa-percent obsidian-input-icon"></i>
+                                <input type="number" step="0.01" id="debt" name="debt" placeholder="e.g. 0.15" value="{{ request.form.get('debt', '') }}" required class="obsidian-input" oninput="recalculateLiveScore()">
+                            </div>
+
+                            <!-- Emergency Fund (Factor 5) -->
+                            <div class="obsidian-input-group">
+                                <label for="emergency" class="obsidian-label">Emergency Reserves (Mo)</label>
+                                <i class="fa-solid fa-shield-heart obsidian-input-icon"></i>
+                                <input type="number" step="0.1" id="emergency" name="emergency" placeholder="e.g. 6.0" value="{{ request.form.get('emergency', '') }}" required class="obsidian-input" oninput="recalculateLiveScore()">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: Goals & Risk Tolerance -->
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-3 border-b border-white/10 pb-3">
+                            <div class="w-8 h-8 rounded-lg bg-[#FF8A00]/20 border border-[#FF8A00]/30 flex items-center justify-center text-[#FFC857] text-sm">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-extrabold text-white font-heading">4. Financial Objectives & Risk Appetite</h3>
+                                <p class="text-xs text-[#A1A1AA]">Select investment timeframe and primary goal (House, Car, Education, Retirement).</p>
+                            </div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            
+                            <!-- Risk Tolerance -->
+                            <div class="obsidian-input-group">
+                                <label for="risk" class="obsidian-label">Risk Tolerance</label>
+                                <i class="fa-solid fa-chart-line-down obsidian-input-icon"></i>
+                                <select id="risk" name="risk" required class="obsidian-input">
+                                    <option value="" disabled {% if not request.form.get('risk') %}selected{% endif %}>Select Risk Profile</option>
+                                    <option value="Low" {% if request.form.get('risk') == 'Low' %}selected{% endif %}>Low (Conservative - Capital Preservation)</option>
+                                    <option value="Medium" {% if request.form.get('risk') == 'Medium' %}selected{% endif %}>Medium (Balanced Growth)</option>
+                                    <option value="High" {% if request.form.get('risk') == 'High' %}selected{% endif %}>High (Aggressive Appreciation)</option>
+                                </select>
+                            </div>
+
+                            <!-- Investment Goal (FEATURE 8 TARGET SELECTION) -->
+                            <div class="obsidian-input-group">
+                                <label for="goal" class="obsidian-label">Primary Investment Goal</label>
+                                <i class="fa-solid fa-flag-checkered obsidian-input-icon"></i>
+                                <select id="goal" name="goal" required class="obsidian-input">
+                                    <option value="" disabled {% if not request.form.get('goal') %}selected{% endif %}>Select Primary Goal</option>
+                                    <option value="House" {% if request.form.get('goal') == 'House' %}selected{% endif %}>Buy House</option>
+                                    <option value="Car" {% if request.form.get('goal') == 'Car' %}selected{% endif %}>Car Purchase</option>
+                                    <option value="Education" {% if request.form.get('goal') == 'Education' %}selected{% endif %}>Higher Education</option>
+                                    <option value="Retirement" {% if request.form.get('goal') == 'Retirement' %}selected{% endif %}>Retirement & Freedom</option>
+                                    <option value="Wealth Creation" {% if request.form.get('goal') == 'Wealth Creation' %}selected{% endif %}>Wealth Creation</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SUBMIT BUTTON -->
+                    <div class="pt-4">
+                        <button type="submit" id="submitBtn" class="btn-signature w-full py-5 rounded-2xl text-lg font-black tracking-wide cursor-pointer flex items-center justify-center gap-3 group relative overflow-hidden">
+                            <span class="btn-text flex items-center gap-3">
+                                <i class="fa-solid fa-heart-pulse text-xl group-hover:rotate-12 transition-transform duration-300"></i>
+                                Get AI Recommendation & Financial Diagnostic
+                                <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+
+                            <div class="btn-loader">
+                                <i class="fa-solid fa-circle-notch fa-spin text-2xl text-[#0F0F0F] mr-3"></i>
+                                <span>Evaluating Telemetry & Synthesizing Recommendations...</span>
+                            </div>
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </section>
+
+
+        <!-- PROFESSIONAL FINANCIAL DISCLAIMER -->
+        <section id="disclaimer" class="scroll-mt-28 obsidian-card rounded-2xl p-6 border border-white/10 text-[#A1A1AA] space-y-3">
+            <div class="flex items-center gap-3 text-[#FFC857] font-bold text-sm">
+                <i class="fa-solid fa-shield-cat text-lg"></i>
+                <span>Important Financial Disclaimer & Privacy Safeguards</span>
+            </div>
+            <p class="text-xs leading-relaxed">
+                <strong>FinAI</strong> calculates a 0–100 Financial Health Score, evaluates Loan Risk Probability, estimates Goal Timelines, and generates automated risk recommendations based on user telemetry. This platform is for educational purposes and does not replace a licensed fiduciary financial planner.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 bg-[#0F0F0F]/90 py-10 mt-20 relative z-10 text-[#A1A1AA] text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#FF8A00] to-[#FFC857] text-[#0F0F0F] flex items-center justify-center font-black">
+                    <i class="fa-solid fa-crown text-xs"></i>
+                </div>
+                <span class="font-extrabold font-heading text-white text-base tracking-tight">Fin<span class="text-[#FFC857]">AI</span></span>
+                <span class="text-[#A1A1AA]">© 2026 FinAI Intelligence Platform. All rights reserved.</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-[#A1A1AA]">
+                <a href="#advisor-form" class="hover:text-white transition-colors">Advisor Form</a>
+                <a href="#results-section" class="hover:text-white transition-colors">Loan Risk & AI Tips</a>
+                <a href="#goal-tracker" class="hover:text-white transition-colors">Goal Tracker</a>
+                <a href="#spending-chart" class="hover:text-white transition-colors">Spending Chart</a>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT -->
+    <script>
+        // Form Loading Spinner State
+        document.getElementById("financeForm").addEventListener("submit", function() {
+            document.getElementById("financeForm").classList.add("form-submitting");
+        });
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        // FEATURE 10: INTERACTIVE CHART.JS SPENDING DONUT CHART
+        let spendingChartInstance = null;
+        function renderSpendingChart() {
+            const ctx = document.getElementById('spendingDonutChart');
+            if (!ctx) return;
+
+            const needsVal = {{ monthly_needs_val }};
+            const savingsVal = {{ monthly_savings_val }};
+            const emiVal = {{ monthly_emi_val }};
+
+            if (spendingChartInstance) {
+                spendingChartInstance.destroy();
+            }
+
+            spendingChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Needs & Expenses', 'Net Surplus & Savings', 'EMI & Loan Payments'],
+                    datasets: [{
+                        data: [needsVal, savingsVal, emiVal],
+                        backgroundColor: ['#FF8A00', '#FFC857', '#FFF4DE'],
+                        borderColor: '#0F0F0F',
+                        borderWidth: 3,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1A1A1A',
+                            titleColor: '#FFC857',
+                            bodyColor: '#FFFFFF',
+                            borderColor: 'rgba(255, 138, 0, 0.4)',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ₹' + context.raw.toLocaleString('en-IN');
+                                }
+                            }
+                        }
+                    },
+                    cutout: '72%'
+                }
+            });
+        }
+
+        // Live Real-Time Financial Health Score Calculator (0-100)
+        function recalculateLiveScore() {
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const savings = parseFloat(document.getElementById('savings').value) || 0;
+            const debt = parseFloat(document.getElementById('debt').value) || 0;
+            const credit = parseFloat(document.getElementById('credit').value) || 0;
+            const emergency = parseFloat(document.getElementById('emergency').value) || 0;
+            const surplus = parseFloat(document.getElementById('surplus').value) || 0;
+
+            if (!income && !credit && !savings) {
+                document.getElementById('liveScorePreview').innerText = '--';
+                return;
+            }
+
+            const monthly_income = income > 0 ? income / 12 : 1;
+
+            // Factor 1: Credit score (350-900 range, 30% weight)
+            const credit_component = Math.min(Math.max((credit - 350) / (900 - 350) * 100, 0), 100);
+
+            // Factor 2: Savings ratio relative to income (25% weight)
+            const savings_ratio = income > 0 ? savings / income : 0;
+            const savings_component = Math.min((savings_ratio / 2) * 100, 100);
+
+            // Factor 3: Debt-to-income ratio (20% weight, lower is better)
+            const debt_component = Math.max(0, 100 - (Math.min(debt, 5) / 5 * 100));
+
+            // Factor 4: Emergency fund months (15% weight, 6 months benchmark)
+            const emergency_component = Math.min((emergency / 6) * 100, 100);
+
+            // Factor 5: Monthly surplus relative to income (10% weight)
+            const surplus_ratio = monthly_income > 0 ? surplus / monthly_income : 0;
+            const surplus_component = Math.min(Math.max(surplus_ratio, 0) * 100, 100);
+
+            const score = Math.round(Math.min(Math.max(
+                (credit_component * 0.30) +
+                (savings_component * 0.25) +
+                (debt_component * 0.20) +
+                (emergency_component * 0.15) +
+                (surplus_component * 0.10),
+                0
+            ), 100));
+
+            document.getElementById('liveScorePreview').innerText = score;
+        }
+
+        // Live Custom 50/30/20 Budget Recalculator
+        function updateCustomBudget() {
+            const annualIncome = parseFloat(document.getElementById('income').value) || 0;
+            const customMonthlyInput = parseFloat(document.getElementById('customMonthlyIncome').value);
+
+            let monthlyIncome = 0;
+            if (!isNaN(customMonthlyInput) && customMonthlyInput > 0) {
+                monthlyIncome = customMonthlyInput;
+            } else if (annualIncome > 0) {
+                monthlyIncome = Math.round(annualIncome / 12);
+            } else {
+                monthlyIncome = 80000;
+            }
+
+            const needs = Math.round(monthlyIncome * 0.50);
+            const wants = Math.round(monthlyIncome * 0.30);
+            const savings = Math.round(monthlyIncome * 0.20);
+
+            const formatVal = (val) => '₹' + val.toLocaleString('en-IN');
+
+            const incDisp = document.getElementById('budgetIncomeDisplay');
+            const needsDisp = document.getElementById('needsAmountDisplay');
+            const wantsDisp = document.getElementById('wantsAmountDisplay');
+            const savingsDisp = document.getElementById('savingsAmountDisplay');
+
+            if (incDisp) incDisp.innerText = formatVal(monthlyIncome) + ' / mo';
+            if (needsDisp) needsDisp.innerText = formatVal(needs);
+            if (wantsDisp) wantsDisp.innerText = formatVal(wants);
+            if (savingsDisp) savingsDisp.innerText = formatVal(savings);
+        }
+
+        // FEATURE 8: Interactive AI Goal & Retirement Time Tracker Calculator
+        function updateLiveGoalTracker() {
+            const categoryEl = document.getElementById('goalCategoryInput');
+            const targetEl = document.getElementById('goalTargetInput');
+            const savingsEl = document.getElementById('goalSavingsInput');
+            const surplusEl = document.getElementById('goalMonthlySurplusInput');
+            const rateEl = document.getElementById('goalReturnRateInput');
+
+            if (!targetEl || !savingsEl || !surplusEl) return;
+
+            const category = categoryEl ? categoryEl.value : 'Retirement';
+            const target = parseFloat(targetEl.value) || 0;
+            const savings = parseFloat(savingsEl.value) || 0;
+            const monthlySurplus = parseFloat(surplusEl.value) || 0;
+            const returnRatePct = rateEl ? (parseFloat(rateEl.value) || 0) : 10;
+
+            const formatINR = (val) => '₹' + Math.round(val).toLocaleString('en-IN');
+
+            const remaining = Math.max(target - savings, 0);
+            const annualContrib = monthlySurplus * 12;
+
+            let estimatedYears = 0;
+
+            if (remaining <= 0) {
+                estimatedYears = 0;
+            } else if (annualContrib <= 0 && returnRatePct <= 0) {
+                estimatedYears = Infinity;
+            } else {
+                const r = returnRatePct / 100;
+                if (r > 0 && annualContrib > 0) {
+                    const P = annualContrib;
+                    const S = savings;
+                    const ratio = (target + P / r) / (S + P / r);
+                    if (ratio > 1) {
+                        estimatedYears = Math.log(ratio) / Math.log(1 + r);
+                    } else {
+                        estimatedYears = 0;
+                    }
+                } else if (annualContrib > 0) {
+                    estimatedYears = remaining / annualContrib;
+                } else if (savings > 0 && r > 0) {
+                    estimatedYears = Math.log(target / savings) / Math.log(1 + r);
+                } else {
+                    estimatedYears = Infinity;
+                }
+            }
+
+            let yearsText = '';
+            if (remaining <= 0) {
+                yearsText = 'Goal Reached!';
+            } else if (!isFinite(estimatedYears) || isNaN(estimatedYears)) {
+                yearsText = '∞ (Add Surplus)';
+            } else {
+                yearsText = estimatedYears.toFixed(1) + ' Years';
+            }
+
+            const pct = target > 0 ? Math.min(Math.round((savings / target) * 100), 100) : 100;
+
+            const iconMap = {
+                'Retirement': 'fa-person-cane',
+                'House': 'fa-house',
+                'Car': 'fa-car',
+                'Education': 'fa-graduation-cap',
+                'Wealth Creation': 'fa-chart-line-up'
+            };
+
+            const iconClass = iconMap[category] || 'fa-bullseye';
+
+            const goalNameDisp = document.getElementById('goalNameDisplay');
+            const goalIconDisp = document.getElementById('goalIconDisplay');
+            const goalSelectedDisp = document.getElementById('goalSelectedDisplay');
+            const goalSavingsDisp = document.getElementById('goalSavingsDisplay');
+            const goalTargetDisp = document.getElementById('goalTargetDisplay');
+            const goalYearsDisp = document.getElementById('goalYearsDisplay');
+            const goalPctDisplayText = document.getElementById('goalPctDisplayText');
+            const goalRemainingDisp = document.getElementById('goalRemainingDisplay');
+            const goalProgressBar = document.getElementById('goalProgressBar');
+
+            if (goalNameDisp) goalNameDisp.innerText = category;
+            if (goalSelectedDisp) goalSelectedDisp.innerText = category;
+            if (goalIconDisp) goalIconDisp.className = 'fa-solid ' + iconClass + ' text-[#FFC857]';
+            if (goalSavingsDisp) goalSavingsDisp.innerText = formatINR(savings);
+            if (goalTargetDisp) goalTargetDisp.innerText = formatINR(target);
+            if (goalYearsDisp) goalYearsDisp.innerText = yearsText;
+            if (goalPctDisplayText) goalPctDisplayText.innerText = `Goal Completion Progress: ${pct}% Achieved`;
+            if (goalRemainingDisp) goalRemainingDisp.innerText = `Remaining Balance: ${formatINR(remaining)}`;
+            if (goalProgressBar) goalProgressBar.style.width = pct + '%';
+        }
+
+        function onGoalCategoryChange() {
+            const categoryEl = document.getElementById('goalCategoryInput');
+            const targetEl = document.getElementById('goalTargetInput');
+            if (!categoryEl || !targetEl) return;
+
+            const defaults = {
+                'Retirement': 10000000,
+                'House': 2500000,
+                'Education': 1500000,
+                'Car': 1000000,
+                'Wealth Creation': 5000000
+            };
+
+            const val = categoryEl.value;
+            if (defaults[val]) {
+                targetEl.value = defaults[val];
+            }
+            updateLiveGoalTracker();
+        }
+
+        // Demo Profiles Quick Fill Helper
+        function fillProfile(type) {
+            const profiles = {
+                wealth: {
+                    age: 32,
+                    income: 960000,
+                    expenses: 40000,
+                    savings: 540000,
+                    loan: 0,
+                    credit: 780,
+                    dependents: 1,
+                    emergency: 6.0,
+                    surplus: 20000,
+                    debt: 0.15,
+                    existing_loan: 'No',
+                    experience: 'Intermediate',
+                    risk: 'High',
+                    employment: 'Salaried',
+                    goal: 'House'
+                },
+                balanced: {
+                    age: 28,
+                    income: 600000,
+                    expenses: 25000,
+                    savings: 150000,
+                    loan: 100000,
+                    credit: 690,
+                    dependents: 0,
+                    emergency: 3.5,
+                    surplus: 10000,
+                    debt: 0.35,
+                    existing_loan: 'Yes',
+                    experience: 'Beginner',
+                    risk: 'Medium',
+                    employment: 'Salaried',
+                    goal: 'Car'
+                },
+                debt: {
+                    age: 45,
+                    income: 400000,
+                    expenses: 28000,
+                    savings: 30000,
+                    loan: 250000,
+                    credit: 580,
+                    dependents: 2,
+                    emergency: 1.0,
+                    surplus: 3000,
+                    debt: 0.65,
+                    existing_loan: 'Yes',
+                    experience: 'Beginner',
+                    risk: 'Low',
+                    employment: 'Self-Employed',
+                    goal: 'Retirement'
+                }
+            };
+
+            const data = profiles[type];
+            if (!data) return;
+
+            for (const key in data) {
+                const el = document.getElementById(key);
+                if (el) {
+                    el.value = data[key];
+                    el.classList.add('border-[#FF8A00]');
+                    setTimeout(() => el.classList.remove('border-[#FF8A00]'), 600);
+                }
+            }
+
+            const customIncomeEl = document.getElementById('customMonthlyIncome');
+            if (customIncomeEl && data.income) {
+                customIncomeEl.value = Math.round(data.income / 12);
+            }
+
+            const goalCatInput = document.getElementById('goalCategoryInput');
+            const goalSavInput = document.getElementById('goalSavingsInput');
+            const goalSurplusInput = document.getElementById('goalMonthlySurplusInput');
+            if (goalCatInput && data.goal) goalCatInput.value = data.goal;
+            if (goalSavInput && data.savings) goalSavInput.value = data.savings;
+            if (goalSurplusInput && data.surplus) goalSurplusInput.value = data.surplus;
+
+            recalculateLiveScore();
+            updateCustomBudget();
+            onGoalCategoryChange();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSpendingChart();
+            recalculateLiveScore();
+            updateCustomBudget();
+            updateLiveGoalTracker();
+        });
+    </script>
+
+</body>
+</html>
